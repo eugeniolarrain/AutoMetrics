@@ -1,4 +1,4 @@
-import LoginButton from "@/login_button"
+import LoginButton from "./login-button"
 
 export default function Home() {
   return (
