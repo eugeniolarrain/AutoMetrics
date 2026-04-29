@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gestión de Autos",
-  description: "Sistema de gestión de automóviles",
+  title: "AutoMetrics - Gestión de Automóviles",
+  description: "Sistema de gestión de automóviles y métricas",
 };
 
 export default function RootLayout({
@@ -29,9 +29,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
-
-// GET /api/vehicles - Listar todos los vehículos
 export async function GET() {
   try {
     const vehicles = await prisma.vehicle.findMany({
@@ -31,33 +28,29 @@ export async function GET() {
   }
 }
 
-// POST /api/vehicles - Crear un nuevo vehículo
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, brand, model, year, licensePlate, mileage, status } = body;
+    const { userId, marca, modelo, anio, placa, kilometros } = body;
 
-    // Validaciones
-    if (!userId || !brand || !model || !year || !licensePlate) {
+    if (!userId || !marca || !modelo || !anio || !placa) {
       return NextResponse.json(
-        { error: 'Campos requeridos: userId, brand, model, year, licensePlate' },
+        { error: 'Campos requeridos: userId, marca, modelo, anio, placa' },
         { status: 400 }
       );
     }
 
-    // Verificar si ya existe un vehículo con esa patente
     const existing = await prisma.vehicle.findUnique({
-      where: { licensePlate },
+      where: { placa },
     });
 
     if (existing) {
       return NextResponse.json(
-        { error: 'Ya existe un vehículo con esa patente' },
+        { error: 'Ya existe un vehículo con esa placa' },
         { status: 409 }
       );
     }
 
-    // Verificar que el usuario existe
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -72,12 +65,11 @@ export async function POST(request: NextRequest) {
     const vehicle = await prisma.vehicle.create({
       data: {
         userId,
-        brand,
-        model,
-        year: parseInt(year),
-        licensePlate,
-        mileage: mileage ? parseInt(mileage) : 0,
-        status: status || 'active',
+        marca,
+        modelo,
+        anio: parseInt(anio),
+        placa,
+        kilometros: kilometros ? parseInt(kilometros) : 0,
       },
       include: {
         user: {

@@ -4,12 +4,11 @@ import { useEffect, useState } from 'react';
 
 interface Vehicle {
   id: string;
-  brand: string;
-  model: string;
-  year: number;
-  licensePlate: string;
-  mileage: number;
-  status: string;
+  marca: string;
+  modelo: string;
+  anio: number;
+  placa: string;
+  kilometros: number;
   user: {
     id: string;
     name: string | null;
@@ -22,11 +21,11 @@ export default function VehiclesPage() {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     userId: '',
-    brand: '',
-    model: '',
-    year: '',
-    licensePlate: '',
-    mileage: '',
+    marca: '',
+    modelo: '',
+    anio: '',
+    placa: '',
+    kilometros: '',
   });
   const [message, setMessage] = useState('');
 
@@ -61,7 +60,7 @@ export default function VehiclesPage() {
 
       if (res.ok) {
         setMessage('Vehículo creado correctamente');
-        setFormData({ userId: '', brand: '', model: '', year: '', licensePlate: '', mileage: '' });
+        setFormData({ userId: '', marca: '', modelo: '', anio: '', placa: '', kilometros: '' });
         fetchVehicles();
       } else {
         setMessage(`Error: ${data.error}`);
@@ -90,7 +89,6 @@ export default function VehiclesPage() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Gestión de Vehículos</h1>
 
-        {/* Formulario */}
         <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow mb-8">
           <h2 className="text-xl font-semibold mb-4">Nuevo Vehículo</h2>
           <div className="grid grid-cols-2 gap-4">
@@ -105,40 +103,40 @@ export default function VehiclesPage() {
             <input
               type="text"
               placeholder="Marca"
-              value={formData.brand}
-              onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
+              value={formData.marca}
+              onChange={(e) => setFormData({ ...formData, marca: e.target.value })}
               className="border p-2 rounded"
               required
             />
             <input
               type="text"
               placeholder="Modelo"
-              value={formData.model}
-              onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+              value={formData.modelo}
+              onChange={(e) => setFormData({ ...formData, modelo: e.target.value })}
               className="border p-2 rounded"
               required
             />
             <input
               type="number"
               placeholder="Año"
-              value={formData.year}
-              onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+              value={formData.anio}
+              onChange={(e) => setFormData({ ...formData, anio: e.target.value })}
               className="border p-2 rounded"
               required
             />
             <input
               type="text"
-              placeholder="Patente"
-              value={formData.licensePlate}
-              onChange={(e) => setFormData({ ...formData, licensePlate: e.target.value })}
+              placeholder="Placa"
+              value={formData.placa}
+              onChange={(e) => setFormData({ ...formData, placa: e.target.value })}
               className="border p-2 rounded"
               required
             />
             <input
               type="number"
-              placeholder="Kilometraje"
-              value={formData.mileage}
-              onChange={(e) => setFormData({ ...formData, mileage: e.target.value })}
+              placeholder="Kilómetros"
+              value={formData.kilometros}
+              onChange={(e) => setFormData({ ...formData, kilometros: e.target.value })}
               className="border p-2 rounded"
             />
           </div>
@@ -151,7 +149,6 @@ export default function VehiclesPage() {
           {message && <p className="mt-2 text-green-600">{message}</p>}
         </form>
 
-        {/* Lista */}
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Vehículos Registrados</h2>
           {loading ? (
@@ -165,25 +162,19 @@ export default function VehiclesPage() {
                   <th className="text-left py-2">Marca</th>
                   <th className="text-left py-2">Modelo</th>
                   <th className="text-left py-2">Año</th>
-                  <th className="text-left py-2">Patente</th>
+                  <th className="text-left py-2">Placa</th>
                   <th className="text-left py-2">Km</th>
-                  <th className="text-left py-2">Estado</th>
                   <th className="text-left py-2">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {vehicles.map((v) => (
                   <tr key={v.id} className="border-b">
-                    <td className="py-2">{v.brand}</td>
-                    <td className="py-2">{v.model}</td>
-                    <td className="py-2">{v.year}</td>
-                    <td className="py-2">{v.licensePlate}</td>
-                    <td className="py-2">{v.mileage}</td>
-                    <td className="py-2">
-                      <span className={`px-2 py-1 rounded text-sm ${v.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                        {v.status}
-                      </span>
-                    </td>
+                    <td className="py-2">{v.marca}</td>
+                    <td className="py-2">{v.modelo}</td>
+                    <td className="py-2">{v.anio}</td>
+                    <td className="py-2">{v.placa}</td>
+                    <td className="py-2">{v.kilometros}</td>
                     <td className="py-2">
                       <button
                         onClick={() => handleDelete(v.id)}

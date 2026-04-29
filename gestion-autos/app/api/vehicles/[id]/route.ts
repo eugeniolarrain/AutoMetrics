@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
-// GET /api/vehicles/[id] - Obtener un vehículo por ID
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
@@ -42,14 +39,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-// PUT /api/vehicles/[id] - Actualizar un vehículo
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
     const body = await request.json();
-    const { brand, model, year, licensePlate, mileage, status, userId } = body;
+    const { marca, modelo, anio, placa, kilometros, userId } = body;
 
-    // Verificar si el vehículo existe
     const existingVehicle = await prisma.vehicle.findUnique({
       where: { id },
     });
@@ -61,21 +56,19 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Verificar patente única si se está actualizando
-    if (licensePlate && licensePlate !== existingVehicle.licensePlate) {
+    if (placa && placa !== existingVehicle.placa) {
       const duplicate = await prisma.vehicle.findUnique({
-        where: { licensePlate },
+        where: { placa },
       });
 
       if (duplicate) {
         return NextResponse.json(
-          { error: 'Ya existe un vehículo con esa patente' },
+          { error: 'Ya existe un vehículo con esa placa' },
           { status: 409 }
         );
       }
     }
 
-    // Si se cambia el userId, verificar que el nuevo usuario exista
     if (userId && userId !== existingVehicle.userId) {
       const user = await prisma.user.findUnique({
         where: { id: userId },
@@ -92,12 +85,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const vehicle = await prisma.vehicle.update({
       where: { id },
       data: {
-        brand,
-        model,
-        year: year ? parseInt(year) : undefined,
-        licensePlate,
-        mileage: mileage !== undefined ? parseInt(mileage) : undefined,
-        status,
+        marca,
+        modelo,
+        anio: anio ? parseInt(anio) : undefined,
+        placa,
+        kilometros: kilometros !== undefined ? parseInt(kilometros) : undefined,
         userId,
       },
       include: {
@@ -121,12 +113,10 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-// DELETE /api/vehicles/[id] - Eliminar un vehículo
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
-    // Verificar si el vehículo existe
     const existingVehicle = await prisma.vehicle.findUnique({
       where: { id },
     });
