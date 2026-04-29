@@ -2,7 +2,11 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 
-export function LoginButton() {
+interface LoginButtonProps {
+  isLink?: boolean;
+}
+
+export function LoginButton({ isLink }: LoginButtonProps) {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -25,6 +29,17 @@ export function LoginButton() {
           Cerrar sesión
         </button>
       </div>
+    );
+  }
+
+  if (isLink) {
+    return (
+      <button
+        onClick={() => signIn("google")}
+        className="text-neutral-subtext hover:text-neutral-text transition hidden md:block"
+      >
+        Iniciar sesión
+      </button>
     );
   }
 

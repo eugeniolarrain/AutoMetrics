@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import { LoginButton } from "./login-button";
 
 function Navbar() {
   return (
@@ -14,10 +15,8 @@ function Navbar() {
         <a href="#contact" className="text-neutral-subtext hover:text-neutral-text transition">Contacto</a>
       </div>
       <div className="flex items-center gap-3">
-        <a href="/api/auth/signin" className="text-neutral-subtext hover:text-neutral-text transition hidden md:block">
-          Iniciar sesión
-        </a>
-        <a href="/api/auth/signin" className="bg-accent hover:bg-accent-hover px-4 py-2 rounded-lg font-medium transition">
+        <LoginButton isLink />
+        <a href="#" className="bg-accent hover:bg-accent-hover px-4 py-2 rounded-lg font-medium transition">
           Comenzar gratis
         </a>
       </div>
@@ -40,9 +39,7 @@ function Hero() {
             Gestiona tu flota de vehículos, controla gastos, recibe recordatorios de mantención y mantén todo bajo control en un solo lugar.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <a href="/api/auth/signin" className="bg-accent hover:bg-accent-hover px-6 py-3 rounded-lg font-medium text-center transition">
-              Comenzar gratis
-            </a>
+            <LoginButton />
             <button className="border border-neutral-border hover:border-accent px-6 py-3 rounded-lg font-medium transition">
               Ver demo
             </button>
